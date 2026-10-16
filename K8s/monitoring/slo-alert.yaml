@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: robot-shop-slo
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: robot-shop-slo
+      rules:
+        - alert: RobotShopAvailabilityBurn
+          expr: |
+            (1 - avg(avg_over_time(probe_success{job=~"probe/monitoring/robot-shop"}[5m]))) > (14.4 * 0.005)
+          for: 2m
+          labels:
+            severity: page
+          annotations:
+            summary: Robot Shop availability SLO is burning fast
+            description: More than 7.2% of probes failed over 5m, which is 14.4x the allowed error rate for a 99.5% SLO.

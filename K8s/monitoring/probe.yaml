@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: robot-shop
+  namespace: monitoring
+spec:
+  interval: 15s
+  module: http_2xx
+  prober:
+    url: blackbox-prometheus-blackbox-exporter.monitoring.svc:9115
+  targets:
+    staticConfig:
+      static:
+        - http://web.robot-shop-namespace.svc:8080/
+        - http://web.robot-shop-namespace.svc:8080/api/catalogue/products
+        - http://web.robot-shop-namespace.svc:8080/api/catalogue/categories
+        - http://web.robot-shop-namespace.svc:8080/api/user/uniqueid
+        - http://web.robot-shop-namespace.svc:8080/api/cart/metrics
+        - http://web.robot-shop-namespace.svc:8080/api/payment/metrics

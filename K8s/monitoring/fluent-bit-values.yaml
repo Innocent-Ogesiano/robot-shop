@@ -1,0 +1,25 @@
+config:
+  inputs: |
+    [INPUT]
+        Name tail
+        Path /var/log/containers/*.log
+        multiline.parser docker, cri
+        Tag kube.*
+        Mem_Buf_Limit 5MB
+  filters: |
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Merge_Log On
+        Keep_Log On
+        K8S-Logging.Parser On
+        Buffer_Size 0
+  outputs: |
+    [OUTPUT]
+        Name loki
+        Match kube.*
+        Host loki.monitoring.svc.cluster.local
+        Port 3100
+        Labels job=fluent-bit,service=$kubernetes['labels']['service'],namespace=$kubernetes['namespace_name']
+        Remove_keys kubernetes
+        Line_format json

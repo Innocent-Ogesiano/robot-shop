@@ -1,0 +1,12 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: robot-shop
+  namespace: robot-shop-namespace
+spec:
+  exporter:
+    endpoint: http://jaeger.monitoring.svc:4318   # your Jaeger's OTLP HTTP endpoint
+  propagators: [tracecontext, baggage]
+  sampler:
+    type: parentbased_traceidratio
+    argument: "1"
