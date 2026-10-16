@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         service: shipping
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "true"
     spec:
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
@@ -26,10 +28,10 @@ spec:
         # it's Java it needs lots of memory
         resources:
           limits:
-            cpu: 200m
+            cpu: 500m
             memory: 1000Mi
           requests:
-            cpu: 100m
+            cpu: 250m
             memory: 500Mi
         readinessProbe:
           httpGet:
